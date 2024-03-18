@@ -17,8 +17,9 @@
  *    shallowCopy({a: 2, b: { a: [1, 2, 3]}}) => {a: 2, b: { a: [1, 2, 3]}}
  *    shallowCopy({}) => {}
  */
-function shallowCopy(/* obj */) {
-  throw new Error('Not implemented');
+function shallowCopy(obj) {
+  const result = {};
+  return Object.assign(result, obj);
 }
 
 /**
@@ -34,6 +35,13 @@ function shallowCopy(/* obj */) {
  */
 function mergeObjects(/* objects */) {
   throw new Error('Not implemented');
+  /* const result = Object.assign({}, ...objects);
+  const temp1 = Object.entries(objects[0]);
+  const temp2 = Object.entries(objects[1]);
+  for (let i = 0; i < temp1.length; i += 1)
+    for (let j = 0; j < temp2.length; j += 1)
+      if (temp1[i][0] === temp2[j][0]) result[temp1[i][0]] += temp1[i][1];
+  return result; */
 }
 
 /**
@@ -49,8 +57,10 @@ function mergeObjects(/* objects */) {
  *    removeProperties({name: 'John', age: 30, city: 'New York'}, 'age') => {name: 'John', city: 'New York'}
  *
  */
-function removeProperties(/* obj, keys */) {
-  throw new Error('Not implemented');
+function removeProperties(obj, keys) {
+  const result = obj;
+  for (let i = 0; i < keys.length; i += 1) delete result[keys[i]];
+  return result;
 }
 
 /**
@@ -65,8 +75,13 @@ function removeProperties(/* obj, keys */) {
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 2}) => true
  *    compareObjects({a: 1, b: 2}, {a: 1, b: 3}) => false
  */
-function compareObjects(/* obj1, obj2 */) {
-  throw new Error('Not implemented');
+function compareObjects(obj1, obj2) {
+  const t1 = Object.entries(obj1);
+  const t2 = Object.entries(obj2);
+  for (let i = 0; i < t1.length; i += 1)
+    for (let j = 0; j < t1[i].length; j += 1)
+      if (t1[i][j] !== t2[i][j]) return false;
+  return true;
 }
 
 /**
@@ -80,8 +95,9 @@ function compareObjects(/* obj1, obj2 */) {
  *    isEmptyObject({}) => true
  *    isEmptyObject({a: 1}) => false
  */
-function isEmptyObject(/* obj */) {
-  throw new Error('Not implemented');
+function isEmptyObject(obj) {
+  const n = Object.keys(obj);
+  return !n.length;
 }
 
 /**
@@ -100,8 +116,8 @@ function isEmptyObject(/* obj */) {
  *    immutableObj.newProp = 'new';
  *    console.log(immutableObj) => {a: 1, b: 2}
  */
-function makeImmutable(/* obj */) {
-  throw new Error('Not implemented');
+function makeImmutable(obj) {
+  return Object.freeze(obj);
 }
 
 /**
@@ -114,8 +130,14 @@ function makeImmutable(/* obj */) {
  *    makeWord({ a: [0, 1], b: [2, 3], c: [4, 5] }) => 'aabbcc'
  *    makeWord({ H:[0], e: [1], l: [2, 3, 8], o: [4, 6], W:[5], r:[7], d:[9]}) => 'HelloWorld'
  */
-function makeWord(/* lettersObject */) {
-  throw new Error('Not implemented');
+function makeWord(lettersObject) {
+  const keys = Object.keys(lettersObject);
+  const str = [];
+  for (let key = 0; key < keys.length; key += 1)
+    lettersObject[keys[key]].forEach((element) => {
+      str[element] = keys[key];
+    });
+  return str.join('');
 }
 
 /**
@@ -132,8 +154,15 @@ function makeWord(/* lettersObject */) {
  *    sellTickets([25, 25, 50]) => true
  *    sellTickets([25, 100]) => false (The seller does not have enough money to give change.)
  */
-function sellTickets(/* queue */) {
-  throw new Error('Not implemented');
+function sellTickets(queue) {
+  if (queue.length === 0) return true;
+  let result = true;
+  if (queue[0] > 25) return false;
+  queue.reduce((sum, item) => {
+    if (item - sum > 25) result = false;
+    return sum + item;
+  });
+  return result;
 }
 
 /**
@@ -149,8 +178,15 @@ function sellTickets(/* queue */) {
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  const r = {
+    width,
+    height,
+    getArea() {
+      return this.width * this.height;
+    },
+  };
+  return r;
 }
 
 /**
@@ -163,8 +199,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 /**
